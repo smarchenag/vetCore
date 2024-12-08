@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: ${db_url}
+    username: ${db_user}
+    password: ${db_password}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 9090
