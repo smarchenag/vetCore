@@ -50,6 +50,8 @@ public class SecurityConfig {
         return http.build();
     }
 
+
+
     @Bean
     public JwtRequestFilter jwtRequestFilter() {
         return new JwtRequestFilter(jwtUtil, customUserDetailsService);

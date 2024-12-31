@@ -1,12 +1,8 @@
 package com.demovet.controller;
 
-import com.demovet.entity.AuthenticationRequest;
-import com.demovet.entity.Mascota;
-import com.demovet.entity.Usuario;
+import com.demovet.entity.*;
 import com.demovet.repository.UsuarioRepository;
-import com.demovet.service.CustomUserDetailService;
-import com.demovet.service.IMascotaService;
-import com.demovet.service.IUsuarioService;
+import com.demovet.service.*;
 import com.demovet.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -16,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/vet")
@@ -38,6 +36,12 @@ public class MainController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private IOrdenService ordenService;
+
+    @Autowired
+    private IProductoService productoService;
 
     public MainController(IUsuarioService service) {
         this.service = service;
@@ -83,5 +87,30 @@ public class MainController {
     @GetMapping("/hello")
     public String hello() {
         return "Hello, World!";
+    }
+
+    @PostMapping("/orders/{idUsuario}")
+    public Orden crearOrden(@RequestBody Orden orden, @PathVariable Long idUsuario){
+        return ordenService.crearOrden(orden,idUsuario);
+    }
+
+    @GetMapping("/orders")
+    public List<Orden> listarOrdenes(){
+        return ordenService.consultarOrdenes();
+    }
+
+    @PostMapping("/add-product/{idOrden}/{idProducto}/{cantidad}")
+    public Orden addProductToOrden(@PathVariable Long idOrden,@PathVariable Long idProducto,@PathVariable int cantidad){
+        return ordenService.addProducto(idOrden,idProducto,cantidad);
+    }
+
+    @PostMapping("/products")
+    public Producto crearProducto(@RequestBody Producto producto){
+        return productoService.saveProducto(producto);
+    }
+
+    @GetMapping("/products")
+    public List<Producto> listarProductos(){
+        return productoService.findAllProductos();
     }
 }
